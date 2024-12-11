@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 const useGetUsers = (id) => {
   const [data, setData] = useState([]);
-  const [errorGet, setErrorGet] = useState("");
+  const [errorGet, setErrorGet] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const getusers = useCallback(async () => {
     try {

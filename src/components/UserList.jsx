@@ -13,7 +13,9 @@ const UserList = () => {
 
   return (
     <>
-      {errorDelete && <div>delet was unsucsesfull</div>}
+      {errorDelete && (
+        <div className="text-red-700">delet was unsucsesfull</div>
+      )}
       <Table
         data={data}
         reFetch={reFetch}

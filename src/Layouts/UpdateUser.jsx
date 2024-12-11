@@ -9,6 +9,7 @@ const UpdateUser = () => {
   const { data, errorGet, isLoading, reFetch } = useGetUsers(id);
   const { errorUpdate, isLoadingUpdate, updateUser } = useUpdateUser();
   const [errorvalidation, setErrorValidation] = useState(false);
+  const [isSuccess, setIsSucces] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     lastname: "",
@@ -42,6 +43,7 @@ const UpdateUser = () => {
     return newError;
   };
   const handleSubmit = () => {
+    console.log("validationErrors");
     const validationErrors = validate();
 
     if (Object.keys(validationErrors).length > 0) {
@@ -51,9 +53,11 @@ const UpdateUser = () => {
     }
     updateUser(id, formData);
     if (errorUpdate) return;
+
     setTimeout(() => {
       reFetch();
     }, 500);
+    setIsSucces(true);
   };
 
   const handleChange = (e) => {
@@ -74,76 +78,49 @@ const UpdateUser = () => {
   // useEffect(() => {
   //   console.log(validate());
   // }, [validate]);
+  console.log(errorGet);
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}
-    >
-      <div>
-        <label htmlFor="name">Name</label>
-        <input
-          className="bg-slate-500"
-          id="name"
-          onChange={handleChange}
-          value={formData.name}
-          placeholder="Please write your name"
-          type="text"
-        />
-      </div>
-      <div>
-        <label htmlFor="lastname">Last Name</label>
-        <input
-          className="bg-slate-500"
-          id="lastname"
-          onChange={handleChange}
-          value={formData.lastname}
-          placeholder="Please write your lastname"
-          type="text"
-        />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          className="bg-slate-500"
-          id="email"
-          onChange={handleChange}
-          value={formData.email}
-          placeholder="Please write your email"
-          type="text"
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          className="bg-slate-500"
-          id="password"
-          onChange={handleChange}
-          value={formData.password}
-          placeholder="Please write your Passwoord"
-          type="password"
-        />
-      </div>
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password</label>
-        <input
-          className="bg-slate-500"
-          id="confirmPassword"
-          onChange={handleChange}
-          value={formData.confirmPassword}
-          placeholder="Please write your confirm Password"
-          type="password"
-        />
-      </div>
-      <div>
-        <Button type="submit">
-          {isLoading && isLoadingUpdate ? "creating..." : "Submit"}
-        </Button>
-      </div>
-      <p>{errorGet}</p>
+    <>
+      <form
+        className="grid grid-cols-2 gap-5 p-4"
+        onSubmit={(e) => {
+          console.log("jh,");
+
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        {Object.entries(formData).map(([key, value], i) => {
+          return (
+            <div key={i} className="flex flex-col gap-2">
+              <label className="text-lg" htmlFor={`${key}`}>
+                {key}
+              </label>
+              <input
+                className="border border-gray-500 px-2 py-1 rounded-lg "
+                id={`${key}`}
+                onChange={handleChange}
+                value={value}
+                placeholder={`Please write your ${key}`}
+                type="text"
+              />
+              <span className="text-red-500">{errorvalidation[key]}</span>
+            </div>
+          );
+        })}
+        <div>
+          <Button type="submit">
+            {isLoading && isLoadingUpdate ? "creating..." : "Submit"}
+          </Button>
+        </div>
+      </form>
+
+      <p className="text-green-600">
+        {isSuccess && "the user updated successfully"}
+      </p>
       <p>{errorUpdate}</p>
-    </form>
+    </>
   );
 };
 

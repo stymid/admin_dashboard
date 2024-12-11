@@ -1,9 +1,9 @@
-import UserList from "../components/UserList";
+import { Link } from "react-router";
 
 const Home = () => {
   return (
     <div>
-      <UserList />
+      <Link to={"/users"}> go to Users</Link>
     </div>
   );
 };
